@@ -1,0 +1,36 @@
+name: Crystal tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          # - macos-latest
+        crystal:
+          - "0.33.0"
+          - "0.34.0"
+          - "0.35.1"
+          - "0.36.1"
+          - "1.0.0"
+          - "1.1.1"
+          - "nightly"
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: ${{ matrix.crystal }}
+
+      - name: Run spec
+        run: >-
+          crystal spec
